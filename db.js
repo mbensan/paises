@@ -1,5 +1,4 @@
 const Sequelize = require('sequelize');
-const CountryModel = require('./models/country');
 
 
 // acá creamos la conexión a la Base de Datos
@@ -8,8 +7,22 @@ const sql = new Sequelize('paises', 'root', '1005', {
   dialect: 'mysql'
 });
 
-// acá inicializamos los modelos
-const Country = CountryModel(sql, Sequelize);
+// acá inicializamos los modelos (tablas)
+const Country = sql.define('Country', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  continent: {
+    type: Sequelize.STRING,
+    allowNull: false
+  }
+});
 
 //  después sincronizamos nuestro código con la base de datos
 sql.sync()
