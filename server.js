@@ -22,6 +22,7 @@ app.use('/static', express.static("static"));
 app.use(require('./routes'));
 
 
+
 app.listen(port, function() {
   console.log('Escuchando en el puerto ' + port);
 });
