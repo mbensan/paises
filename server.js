@@ -1,6 +1,11 @@
 const express = require("express");
+const session = require('express-session');
+const flash = require('connect-flash');
 const app = express();
 const port = 8000;
+
+app.use(session({secret: 'mipropiaclave'}));  
+app.use(flash());
 
 // para los posts
 app.use( express.json() );
@@ -15,6 +20,7 @@ app.use('/static', express.static("static"));
 
 // importar las rutas
 app.use(require('./routes'));
+
 
 
 app.listen(port, function() {
