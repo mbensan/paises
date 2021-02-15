@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 // acá creamos la conexión a la Base de Datos
-const sql = new Sequelize('paises', 'root', '', {
+const sql = new Sequelize('paises', 'root', '1005', {
   host: 'localhost',
   dialect: 'mysql'
 });
@@ -16,13 +16,51 @@ const Country = sql.define('Country', {
   },
   name: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      notNull: {
+        msg: 'Debe indicar un nombre'
+      },
+      len: {
+        args: [3],
+        msg: 'El nonbre debe ser de largo al menos 3'
+      }
+    }
   },
   continent: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      notNull: {
+        msg: 'Debe indicar un continente'
+      }
+    }
   }
 });
+
+const City = sql.define('City', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      notNull: {
+        msg: 'Debe indicar un nombre'
+      },
+      len: {
+        args: [3],
+        msg: 'El nonbre debe ser de largo al menos 3'
+      }
+    }
+  }
+});
+
+Country.hasMany(City);  // Country "tiene muchas" City
+City.belongsTo(Country); // Cada "City" pertenece a un "Country"
 
 //  después sincronizamos nuestro código con la base de datos
 sql.sync()
@@ -36,5 +74,6 @@ sql.sync()
 // finalmente acá listamos todos los modelos que queremos exportar
 module.exports = {
   Country,
+  City
 };
 

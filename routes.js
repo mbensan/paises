@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { Country } = require('./db');
+const { Country, City } = require('./db');
 const router = Router();
 
 
@@ -21,17 +21,47 @@ router.get('/', async (req, res) => {
   res.render('index.ejs', {countries: countries, mensaje: mensaje})
 });
 
+// para mostrar las ciudades
+router.get('/cities', async (req, res) => {
+  const countries = await Country.findAll();
+
+  const cities = await City.findAll({
+    include: [Country]
+  });
+  console.log(cities);
+
+  res.render('cities.ejs', {countries: countries, cities: cities})
+});
+
+// para crear nuevas ciudades
+router.post('/cities', async (req, res) => {
+  console.log(`Creando la ciudad ${req.body.name} para el pais ${req.body.countryId}`);
+  const city = await City.create({
+    name: req.body.name,
+    CountryId: req.body.countryId
+  });
+  res.redirect('/cities');
+});
+
 // para agregar paises
 router.post('/', async (req, res) => {
   // usamos modelos para agregar paises
-  const new_country = await Country.create({
-    name: req.body.name,
-    continent: req.body.continent
-  });
+
+  try {
+    const new_country = await Country.create({
+      name: req.body.name,
+      continent: req.body.continent
+    });
+    req.flash('mensaje', `El pais ${new_country.name} fue creado en base datos.`);
+
+  } catch (errors) {
+    for (var key in errors.errors) {
+      req.flash('mensaje', errors.errors[key].message);
+    }
+  }
 
   console.log("***********  DESDE EL / POST" + req.session.nombreUsuario);
 
-  req.flash('mensaje', `El pais ${new_country.name} fue creado en base datos.`);
 
   res.redirect("/");
 });

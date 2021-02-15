@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paises</title>
+  <link rel="stylesheet" href="/static/bootstrap.min.css">
+  <script src="/static/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-4 offset-2">
+        <h2>Ciudades</h2>
+
+        <form action="/cities" method="POST">
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Nombre de la Ciudad:</label>
+            <input required type="text" class="form-control" id="name" aria-describedby="emailHelp" name="name">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">País al cual pertenece:</label>
+            <select class="form-select" aria-label="Default select example" required name="countryId">
+              <option value>Selecciones País</option>
+              <% for (country of countries) { %>
+                <option value="<%=country.id%>"><%=country.name%></option>
+              <% } %>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    
+      </div>
+      <div class="col-4">
+        <h3>Lista de las ciudades</h3>
+        <div class="card">
+          <div class="card-body">
+            <ul>
+              <% for (city of cities) { %>
+                <li><%=city.name%> (<%=city.Country.name%>)</li>
+              <% } %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

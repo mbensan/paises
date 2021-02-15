@@ -12,59 +12,7 @@
   <script src="static/bootbox.min.js"></script>
 
 
-  <script>
-
-    $(document).ready(function () {
-
-      $(".btnEliminar").on("click", function () {
-        let boton = $(this);
-        let idPais = boton.attr("pais");
-
-        // ¿estas seguro que quieres eliminar el pais?
-        // si y no.
-        bootbox.confirm({
-          message: "¿estas seguro que quieres eliminar el pais?",
-          buttons: {
-            confirm: {
-              label: 'Si',
-              className: 'btn-success'
-            },
-            cancel: {
-              label: 'No',
-              className: 'btn-danger'
-            }
-          },
-          callback: function (result) {
-
-            if (result) {
-              console.log("EL USUARIO QUIERE ELIMINAR");
-              console.log("RUTA PARA ELIMINAR: " + "/eliminar/" + idPais);
-
-              $.get("/eliminar/" + idPais, function (res) {
-                console.log(res);
-
-                // eliminar el LI. 
-                boton.parent().remove();
-
-                bootbox.alert(res.mensaje);
-              }, "json");
-
-
-            } else {
-              console.log("EL USUARIO SE ARREPINTIÓ!");
-            }
-
-          }
-        });
-
-
-
-      });
-
-    });
-  </script>
-
-
+  <script src="static/index.min.js"></script>
 
 </head>
 
@@ -87,11 +35,11 @@
                 <form action="/" method="POST">
                   <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Nombre del País:</label>
-                    <input required type="text" class="form-control" id="text" aria-describedby="emailHelp" name="name">
+                    <input type="text" class="form-control" id="text" aria-describedby="emailHelp" name="name">
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Continente:</label>
-                    <input required type="text" class="form-control" id="exampleInputPassword1" name="continent">
+                    <input type="text" class="form-control" id="exampleInputPassword1" name="continent">
                   </div>
                   <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
@@ -125,10 +73,10 @@
                 </li>
                 <% } %>
             </ul>
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formulario">
-        Agregar Pais
-      </button>
-            
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formulario">
+          Agregar Pais
+        </button>
+        <a class="btn btn-warning" href="/cities">Ir a Ciudades</a>
       
       </div>
     </div>
