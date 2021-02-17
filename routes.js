@@ -1,6 +1,19 @@
 const { Router } = require('express');
-const { Country, City } = require('./db');
+const { Country, City, Language } = require('./db');
 const router = Router();
+
+
+async function prueba() {
+  // primero recupero el país
+  const argentina = await Country.findOne({name: 'Argentina'});
+  // después le puedo crear una ciudad con el método "createCity"
+  const bsas = await argentina.createCity({name: "Buenos Aires"});
+  // puedo borrar una ciudad que pertenezca a argentina
+  await argentina.removeCity(bsas);
+
+  // puedo preguntar si existe la ciudad
+}
+
 
 
 
@@ -28,14 +41,25 @@ router.get('/cities', async (req, res) => {
   const cities = await City.findAll({
     include: [Country]
   });
-  console.log(cities);
 
   res.render('cities.ejs', {countries: countries, cities: cities})
 });
 
 // para crear nuevas ciudades
 router.post('/cities', async (req, res) => {
-  console.log(`Creando la ciudad ${req.body.name} para el pais ${req.body.countryId}`);
+  // console.log(`Creando la ciudad ${req.body.name} para el pais ${req.body.countryId}`);
+
+  const name = req.body.name;
+  const CountryId = req.body.countryId;
+  
+  // validación en el backend
+  if (name == '' || name.length <= 2) {
+    res.statusCode = 400;
+    return res.send('ERROR');
+  } else if (CountryId == '') {
+    return res.send('ERROR')
+  }
+
   const city = await City.create({
     name: req.body.name,
     CountryId: req.body.countryId

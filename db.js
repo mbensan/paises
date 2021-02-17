@@ -59,14 +59,33 @@ const City = sql.define('City', {
   }
 });
 
+const Language = sql.define('Language', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false
+  }
+});
+
+const Speak = sql.define('Speak', {});
+
+// Estas son relaciones uno a muchos
 Country.hasMany(City);  // Country "tiene muchas" City
 City.belongsTo(Country); // Cada "City" pertenece a un "Country"
+
+// Ahora también tendremos relaciones muchos a muchos
+Country.belongsToMany(Language, {through: Speak});
+Language.belongsToMany(Country, {through: Speak});
 
 //  después sincronizamos nuestro código con la base de datos
 sql.sync()
 .then(() => {
   console.log('Base de datos y tablas creadas');
-});  
+}); 
 
 
 
@@ -74,6 +93,7 @@ sql.sync()
 // finalmente acá listamos todos los modelos que queremos exportar
 module.exports = {
   Country,
-  City
+  City,
+  Language
 };
 
